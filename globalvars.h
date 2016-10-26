@@ -1,0 +1,2 @@
+char *exeName;
+int loggingEnabled;
