@@ -187,8 +187,8 @@ void pngEncode(const char *carrierPath, const char *payloadPath, char *outputPat
     //if the initialization of payload fails, exit the program
     if ( !(payload = fopen(payloadPath, "rb")) )
         error_(1, "%s: [pngEncode] Could not read in payload.", exeName);
-    /*else
-        printf("payload: %lu bytes\n", payloadsize = fsize(payloadPath));*/
+    else
+        payloadsize = fsize(payloadPath);
 
     //for the payload to be successfully encoded, the number of pixels in the carrier image times its number of color channels must be EQUAL TO OR GREATER THAN the size of the payload in bits plus 64 additional bits. If not, exit the program.
     if ((carrier.width * carrier.height * carrier.channels) < (payloadsize * 8 + MARKER_PLUS_FILESIZE))

@@ -3,9 +3,7 @@
 #include "fileHandling.h"
 #include "errorHandling.h"
 #include "endianness.h"
-#include "runJPG.h"
 #include "runPNG.h"
-#include "runGIF.h"
 
 static int encode = 0;
 static int decode = 0;
