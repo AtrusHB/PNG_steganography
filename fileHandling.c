@@ -48,17 +48,6 @@ char *faddExt(char *filename, char *extension)
     return result;
 }
 
-unsigned long filesize(const char *filename)
-{
-    FILE *f = fopen(filename,"rb");  /* open the file in read only */
-
-    unsigned long size = 0;
-    if (fseek(f,0,SEEK_END)==0) /* seek was successful */
-        size = ftell(f);
-    fclose(f);
-    return size;
-}
-
 void fremove(FILE *file, const char *filename)
 {
 

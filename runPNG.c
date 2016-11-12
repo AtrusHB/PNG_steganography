@@ -4,7 +4,7 @@
 #include "globalvars.h"
 #include "encoding.h"
 
-#define PNG_SIG_LENGTH 8                        //length of the PNG magin number, in bytes
+#define PNG_SIG_LENGTH 8                        //length of the PNG magic number, in bytes
 #define BYTE_SIZE 8                             //size of a byte, in bits
 #define MARKER 1635021427ul                     //integer that will indicate a file has a hidden payload
 #define MARKER_LENGTH 32                        //length of MARKER, in bits
@@ -26,7 +26,7 @@ typedef struct pngReader
 } pngReader;
 
 
-pngReader readPNG(const char *inputPath)
+static pngReader readPNG(const char *inputPath)
 {
     FILE *inputFile;                            //pointer to the file at location inputPath
     unsigned char sigBuffer[BYTE_SIZE];         //char array to read inputFile's first 8 bytes into
@@ -46,14 +46,14 @@ pngReader readPNG(const char *inputPath)
         error_(1, "%s: [readPNG] '%s' is not a PNG file.", exeName, inputPath);
     }
 
-    //create a read png_struct structure; if unsucessful, close inputFile and exit the program
+    //create a read png_struct structure; if unsuccessful, close inputFile and exit the program
     if ( !(reader.read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL)) )
     {
         fclose(inputFile);
         error_(1, "%s: [readPNG] 'png_create_read_struct' failed.", exeName);
     }
 
-    //create an info png_struct structure; if unsucessful, destroy the read png_struct structure, close inputFile and exit the program
+    //create an info png_struct structure; if unsuccessful, destroy the read png_struct structure, close inputFile and exit the program
     if ( !(reader.info_ptr = png_create_info_struct(reader.read_ptr)) )
     {
         png_destroy_read_struct(&reader.read_ptr, (png_infopp)NULL, (png_infopp)NULL);
@@ -164,7 +164,7 @@ static void writePNG(pngReader *inputPNG, char *outputPath)
     //write the PNG file to outputFile
     png_write_png(write_ptr, inputPNG->info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
-    //close outputFile and destroy the write png_struct structute
+    //close outputFile and destroy the write png_struct structure
     fclose(outputFile);
     png_destroy_write_struct(&write_ptr, &inputPNG->info_ptr);
 
@@ -227,7 +227,7 @@ void pngEncode(const char *carrierPath, const char *payloadPath, char *outputPat
         //each row of bytes has a length equivalent to the width of the carrier image times its number of color channels
         for (x = x; x < carrier.width * carrier.channels; x++)
         {
-            //if no payload bytes have been written on this row, or if the payload byte in "bytebuffer" has been fully writter, attempt to read in another byte from the payload
+            //if no payload bytes have been written on this row, or if the payload byte in "bytebuffer" has been fully written, attempt to read in another byte from the payload
             if (x % BYTE_SIZE == 0)
                 //if there are no more payload bytes left to read in, or if no more payload bytes can be read in, stop iterating through the carrier image pixel data
                 if (!fread(&bytebuffer, 1, 1, payload))
@@ -245,8 +245,6 @@ void pngEncode(const char *carrierPath, const char *payloadPath, char *outputPat
     }
 
     LOOP_END:
-    //add the .png extension to the desired output name
-    outputPath = faddExt(outputPath, ".png");
     //create a new file at location outputPath and write to it our generated package image
     writePNG(&carrier, outputPath);
 
@@ -276,7 +274,7 @@ void pngDecode(const char *packagePath, char *outputPath)
     //read in information from the package PNG file
     package = readPNG(packagePath);
 
-    //exit the program if a file already exists at loacation outputPath, or if a file cannot be created at outputPath
+    //exit the program if a file already exists at location outputPath, or if a file cannot be created at outputPath
     if (favailable(outputPath))
     {
         if ( !(outputFile = fopen(outputPath, "wb")) )
@@ -312,7 +310,7 @@ void pngDecode(const char *packagePath, char *outputPath)
                 if (loggingEnabled)
                     fwrite(package.row_pointers[y]+x, 1, 1, herpderp);
 
-                //if not all bits of markervalue have been assinged, assign this bit to the appropriate bit position in markervalue; otherwise, assign this bit to the appropriate bit position in payloadsize
+                //if not all bits of markervalue have been assigned, assign this bit to the appropriate bit position in markervalue; otherwise, assign this bit to the appropriate bit position in payloadsize
                 if (x < MARKER_LENGTH)
                     markervalue |= ( ( *(package.row_pointers[y]+x) & 1) << x);
                 else

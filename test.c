@@ -19,11 +19,11 @@ static void printHelp(void)
         "  %s encode (-c|--carrier) <c> (-p|--payload) <p> [-k|--package] <k>\n"
         "    -c|--carrier <c>\tRequired; PNG file that will hold the specified payload.\n"
         "    -p|--payload <p>\tRequired; file that will be encoded to the specified carrier.\n"
-        "    -k|--package <k>\tOptional; name (without extension) of file to which to write the resulting package file.\n"
-            "\t\t\t  Default vaule is 'package'.\n\n"
+        "    -k|--package <k>\tOptional; name of file to which to write the resulting package file.\n"
+            "\t\t\t  Default value is 'package'.\n\n"
         "  %s decode (-k|--package) <k> [-p|--payload] <p>\n"
-        "    -k|--package <k>\tRequired; package file conaining an encoded payload.\n"
-        "    -p|--payload <p>\tOptional; name (without extension) of file to which to write the read payload.\n"
+        "    -k|--package <k>\tRequired; package file containing an encoded payload.\n"
+        "    -p|--payload <p>\tOptional; name of file to which to write the read payload.\n"
             "\t\t\t  Default value is 'payload'.\n",
         exeName, exeName, exeName
     );
@@ -50,24 +50,24 @@ static void readArgs(int argc, char *argv[])
         {
             case 'c':
                 if (optarg[0] == '-')
-                    optind--, error_(0, "%s: [readArgs] Option '-c' requires an argumemt.", exeName);
+                    optind--, error_(0, "%s: [readArgs] Option '-c' requires an argument.", exeName);
                 else
                     cstr = optarg;
                 break;
             case 'p':
                 if (optarg[0] == '-')
-                    optind--, error_(0, "%s: [readArgs] Option '-p' requires an argumemt.", exeName);
+                    optind--, error_(0, "%s: [readArgs] Option '-p' requires an argument.", exeName);
                 else
                     pstr = optarg;
                 break;
             case 'k':
                 if (optarg[0] == '-')
-                    optind--, error_(0, "%s: [readArgs] Option '-k' requires an argumemt.", exeName);
+                    optind--, error_(0, "%s: [readArgs] Option '-k' requires an argument.", exeName);
                 else
                     kstr = optarg;
                 break;
             case ':':
-                error_(0, "%s: [readArgs] Option '-%c' requires an argumemt.", exeName, optopt);
+                error_(0, "%s: [readArgs] Option '-%c' requires an argument.", exeName, optopt);
                 break;
             case '?':
                 if (isprint(optopt))
