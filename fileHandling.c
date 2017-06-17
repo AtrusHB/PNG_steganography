@@ -2,6 +2,7 @@
 #include "globalvars.h"
 #include "errorHandling.h"
 
+//Returns 
 int fexist(const char *filename, const char *inputType)
 {
     int temp;
@@ -13,6 +14,7 @@ int fexist(const char *filename, const char *inputType)
     return temp;
 }
 
+//Returns a value of 1 if a file does not exist at "filename".
 int favailable(const char *filename)
 {
     struct stat fileStat;
@@ -26,6 +28,7 @@ int favailable(const char *filename)
     }
 }
 
+//Returns the size (in bytes) of the file at location "filename".
 off_t fsize(const char *filename)
 {
     struct stat st;
@@ -39,6 +42,7 @@ off_t fsize(const char *filename)
     return -1;
 }
 
+//Appends "extension" to "filename" and returns the result.
 char *faddExt(char *filename, char *extension)
 {
     char *result = malloc(strlen(filename) + strlen(extension) + 1);
@@ -48,9 +52,9 @@ char *faddExt(char *filename, char *extension)
     return result;
 }
 
+//Closes and deletes the FILE "file" located at "filename".
 void fremove(FILE *file, const char *filename)
 {
-
     fclose(file);
     if ((remove(filename)) != 0)
         error_(0, "%s: [fremove] %s.", exeName, strerror(errno));
